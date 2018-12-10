@@ -1,6 +1,6 @@
 # nodeBasicAPI
 
-Simple node.js API app
+Simple node.js API app.
 
 ## How to run
 

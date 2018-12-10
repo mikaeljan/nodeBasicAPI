@@ -1,14 +1,14 @@
-// Initial container for environments
+// Initial container for envs
 const envs = {};
 
 // Development (default) env
-environments.staging = {
+envs.dev = {
   port: 3000,
   envName: 'dev'
 };
 
 // Production (default) env
-environments.production = {
+envs.prod = {
   port: 6666,
   envName: 'prod'
 };
@@ -21,8 +21,6 @@ var currentEnv =
 
 // Check that the current environment is one of the envs above, if not => default to dev
 var envToExport =
-  typeof environments[currentEnv] === 'object'
-    ? environments[currentEnv]
-    : environments.dev;
+  typeof envs[currentEnv] === 'object' ? envs[currentEnv] : envs.dev;
 
 module.exports = envToExport;

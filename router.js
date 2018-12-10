@@ -2,7 +2,7 @@
 const handlers = require('./handlers');
 // Define the request router
 let router = {
-  sample: handlers.hello
+  hello: handlers.hello
 };
 
 module.exports = router;

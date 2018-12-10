@@ -1,7 +1,7 @@
-//Define the handlers
+// Define the handlers
 const handlers = {};
 // Sample handler
-handlers.sample = (data, callback) => {
+handlers.hello = (data, callback) => {
   //Callback a http status code, payload = object
   callback(200, { greeting: 'Welcome to our Dev Node.js API app.' });
 };

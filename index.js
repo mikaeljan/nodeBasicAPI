@@ -4,6 +4,7 @@ const http = require('http');
 const url = require('url');
 const handlers = require('./handlers');
 const router = require('./router');
+const StringDecoder = require('string_decoder').StringDecoder;
 
 // Create server
 const server = http.createServer((req, res) => {
@@ -13,16 +14,38 @@ const server = http.createServer((req, res) => {
   const path = parsedUrl.pathname;
   const trimmedPath = path.replace(/^\/+|\/+$/g, '');
 
-  req.on('data', data => {});
-  req.on('end', () => {
-    // Choose a handler this request goes to, if we do not have any set up -> select notFound
+  // Getting the HTTP request method
+  const httpMethod = req.method;
 
+  // Get the query string as an object
+  const queryStringObject = parsedUrl.query;
+  const reqHeaders = req.headers;
+
+  // Get the Payload
+  let stringDecoder = new StringDecoder('utf-8');
+  // Get the stream into a one thing before we decide what to do with it -> buffer
+  let buffer = '';
+  req.on('data', data => {
+    buffer += stringDecoder.write(data);
+  });
+  // End will always be called
+  req.on('end', () => {
+    buffer += stringDecoder.end();
+
+    // Choose a handler this request goes to
     let chosenHandler =
       typeof router[trimmedPath] !== 'undefined'
         ? router[trimmedPath]
         : handlers.notFound;
-    // Construct the data object to send to the handler / can be empty now as we send back fixed response
-    let data = {};
+
+    // Construct the data object to send to the handler
+    let data = {
+      trimmedPath,
+      queryStringObject,
+      httpMethod,
+      reqHeaders,
+      payload: buffer
+    };
     chosenHandler(data, (statusCode, payload) => {
       // Default statuscode or the one called back by the handler
       statusCode = typeof statusCode === 'number' ? statusCode : 200;

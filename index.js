@@ -8,6 +8,20 @@ const StringDecoder = require('string_decoder').StringDecoder;
 
 // Create server
 const server = http.createServer((req, res) => {
+  serverSetup(req, res);
+});
+
+// Make the server listen on a port and log out console.log
+server.listen(config.port, () => {
+  console.log(
+    `The app is now listening on port ${config.port} in ${
+      config.envName
+    } environment.`
+  );
+});
+
+// Unified setup for the server
+const serverSetup = (req, res) => {
   // Get the url and parse it
   const parsedUrl = url.parse(req.url, true);
   // Getting the path and trimming it
@@ -60,13 +74,4 @@ const server = http.createServer((req, res) => {
       res.end(payloadString);
     });
   });
-});
-
-// Make the server listen on a port and log out console.log
-server.listen(config.port, () => {
-  console.log(
-    `The app is now listening on port ${config.port} in ${
-      config.envName
-    } environment.`
-  );
-});
+};
